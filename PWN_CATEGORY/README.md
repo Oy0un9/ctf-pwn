@@ -60,3 +60,22 @@ typical stack overflow problems
     description: a partial overwrite problem.
     
     writeup link: [https://ray-cp.github.io/archivers/强网杯-pwn-writeup#opm](https://ray-cp.github.io/archivers/强网杯-pwn-writeup#opm)
+
+* pointer-stackoverwrite-starctf2019-quicksort
+
+    game: starctf 2019
+
+    description: overwite heap pointer in stack to leak and write.
+    
+    writeup link: [https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#quicksort](https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#quicksort)
+
+
+## odd_skill
+some odd skill that may suprise me
+* rwx-upxpacked-starctf2019-upxofcpp
+
+    game: starctf 2019
+
+    description: a heap double free but with upx pack which form rwx segment.
+    
+    writeup link: [https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#upxofcpp](https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#upxofcpp)

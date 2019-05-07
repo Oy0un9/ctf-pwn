@@ -6,6 +6,29 @@ typical heap problems
 
 ### global_max_fast
 
+* 0ctf2016-zerostorage
+
+    game: 0ctf 2016
+
+    description: an implicit uaf with unsorted bin attack
+
+    writeup link: []()
+
+* bctf2018-baby_arena
+
+    game: bctf 2018
+
+    description: a arbitrary address overwrite with a uncontrollable value
+
+    writeup link: []()
+
+* starctf2019-heap_master
+
+    game: starctf 2019
+
+    description: uaf, io file, unsorted bin attack with 4bit brute
+
+    writeup link: []()
 
 ### waiting for CATEGORY
 

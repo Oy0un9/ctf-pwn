@@ -20,7 +20,7 @@ typical heap problems
 
     description: a arbitrary address overwrite with a uncontrollable value
 
-    writeup link: []()
+    writeup link: [https://ray-cp.github.io/archivers/heap_global_max_fast_exploit#baby_arena](https://ray-cp.github.io/archivers/heap_global_max_fast_exploit#baby_arena)
 
 * starctf2019-heap_master
 
@@ -28,7 +28,18 @@ typical heap problems
 
     description: uaf, io file, unsorted bin attack with 4bit brute
 
-    writeup link: []()
+    writeup link: [https://ray-cp.github.io/archivers/heap_global_max_fast_exploit#heap_master](https://ray-cp.github.io/archivers/heap_global_max_fast_exploit#heap_master)
+
+### sysmalloc
+some exp with sysmalloc function
+
+* rctf2019-many_note
+
+    game: rctf 2019
+
+    description: thread arena, expand top chunk, tough to trigger free
+
+    writeup link: [https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#many_note](https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#many_note)
 
 ### waiting for CATEGORY
 
@@ -78,8 +89,28 @@ typical integer overflow problems
 
     writeup link: [https://ray-cp.github.io/archivers/0CTF_2019_PWN_WRITEUP#if_on_a_winters_night_a_traveler](https://ray-cp.github.io/archivers/0CTF_2019_PWN_WRITEUP#if_on_a_winters_night_a_traveler)
 
-## stack_overflow
-typical stack overflow problems
+## stack
+typical stack related problems such as stack overflow. 
+
+### SROP
+
+* rctf2019-syscall_interface
+
+    game: rctf 2019
+
+    description: srop with brute force.
+    
+    writeup link: []()
+
+### waiting for CATEGORY
+* partial-stackoverwirte-2018-强网杯-opm
+
+    game: 强网杯 2018
+
+    description: a partial overwrite problem.
+    
+    writeup link: [https://ray-cp.github.io/archivers/强网杯-pwn-writeup#opm](https://ray-cp.github.io/archivers/强网杯-pwn-writeup#opm)
+
 
 * partial-stackoverwirte-2018-强网杯-opm
 
@@ -107,3 +138,25 @@ some odd skill that may suprise me
     description: a heap double free but with upx pack which form rwx segment.
     
     writeup link: [https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#upxofcpp](https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#upxofcpp)
+
+## shellcode
+
+Examine the ability to write shellcode
+
+* rctf2019-shellcoder
+
+    game: rctf 2019
+
+    description: seven byte shellcode with rdi unclean.
+    
+    writeup link: [https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#shellcoder](https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#shellcoder)
+
+## comprehensive
+
+* rctf2019-chat
+
+    game: rctf 2019
+
+    description: chat system with complicated stucture.
+    
+    writeup link: [https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#chat](https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#chat)

@@ -1,6 +1,16 @@
 # PWN_CATEGORY
 This is a classification for pwn games that i used to do or recurrent. and all the problem in this repository is typical.
 
+## Content
+
+[heap]()
+[integer_overflow]()
+[stack]()
+[odd_skill]()
+[shellcode]()
+[comprehensive]()
+[IO_FILE]()
+
 ## heap
 typical heap problems
 
@@ -150,6 +160,61 @@ Examine the ability to write shellcode
     description: seven byte shellcode with rdi unclean.
     
     writeup link: [https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#shellcoder](https://ray-cp.github.io/archivers/RCTF_2019_PWN_WRITEUP#shellcoder)
+
+## IO_FILE
+exploitation with io file structure build.
+
+### arbitraty_read_write
+arbitraty read_write with stdin or stdout
+
+* hctf2018-babyprintf_ver2
+
+    game: hctf2018
+
+    description: arbitrary read write with stdout handle.
+    
+    writeup link: []()
+
+* whctf2017-stackoverflow
+
+    game: whctf2017
+
+    description: a null byte overflow to stdin handle to get shell.
+    
+    writeup link: []()
+
+### vtable_hajack
+
+hajack IO FILE's vtable to exploit
+
+* 东华杯2016-pwn450_note
+
+    game: 东华杯2016
+
+    description: classic house of orange.
+    
+    writeup link: []()
+
+### vtable_str_jumps
+
+bypass vtable check with `_IO_str_jumps` vtable.
+
+* ASIS2018-fifty-dollars
+
+    game: ASIS2018
+
+    description: two time fsop.
+    
+    writeup link: []()
+
+* hctf2017-babyprintf
+
+    game: hctf2017
+
+    description: classic vtable check bypass.
+    
+    writeup link: []()
+
 
 ## comprehensive
 

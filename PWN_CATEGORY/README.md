@@ -164,6 +164,10 @@ Examine the ability to write shellcode
 ## IO_FILE
 exploitation with io file structure build.
 
+* play_file_struct.pdf
+
+    description: angelboy's amazing slide with IO FILE.
+
 ### arbitraty_read_write
 arbitraty read_write with stdin or stdout
 

@@ -134,11 +134,43 @@ typical stack related problems such as stack overflow.
 
 ### SROP
 
+* paper_Framing Signals—A Return to Portable Shellcode.pdf
+    paper of srop
+
+* slide_Framing Signals—A Return to Portable Shellcode.pdf
+    slide of srop
+
+* 360ichunqiu2017-smallest
+
+    game: 360ichunqiu 2017
+
+    description: srop with stackoverflow.
+    
+    writeup link: []()
+
 * rctf2019-syscall_interface
 
     game: rctf 2019
 
-    description: srop with brute force.
+    description: `personality syscall` make heap executable, `brk syscall` leak heap address, `srop` to get shell.
+    
+    writeup link: []()
+
+### ret2dl_resolve
+
+* 0ctf2018-babystack
+
+    game: 0ctf 2018
+
+    description: ret2dl_resolve in x86 architecture with fake reloc_arg.
+    
+    writeup link: []()
+
+* hitcon2015-blinkroot
+
+    game: hitcon 2015
+
+    description: ret2dl_resolve in x64 architecture with fake link_map.
     
     writeup link: []()
 

@@ -5,6 +5,7 @@ Table of Contents
 =================
 
    * [PWN_CATEGORY](#pwn_category)
+   * [Table of Contents](#table-of-contents)
       * [heap](#heap)
          * [global_max_fast](#global_max_fast)
          * [largebin_attack](#largebin_attack)
@@ -13,6 +14,7 @@ Table of Contents
       * [integer_overflow](#integer_overflow)
       * [stack](#stack)
          * [SROP](#srop)
+         * [ret2dl_resolve](#ret2dl_resolve)
          * [waiting for CATEGORY](#waiting-for-category-1)
       * [odd_skill](#odd_skill)
       * [shellcode](#shellcode)
@@ -21,6 +23,7 @@ Table of Contents
          * [vtable_hajack](#vtable_hajack)
          * [vtable_str_jumps](#vtable_str_jumps)
       * [comprehensive](#comprehensive)
+
 
 ## heap
 typical heap problems

@@ -9,6 +9,7 @@ Table of Contents
       * [heap](#heap)
          * [global_max_fast](#global_max_fast)
          * [largebin_attack](#largebin_attack)
+         * [tcache](#tcache)
          * [sysmalloc](#sysmalloc)
          * [waiting for CATEGORY](#waiting-for-category)
       * [integer_overflow](#integer_overflow)
@@ -23,6 +24,8 @@ Table of Contents
          * [vtable_hajack](#vtable_hajack)
          * [vtable_str_jumps](#vtable_str_jumps)
       * [comprehensive](#comprehensive)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 
 ## heap

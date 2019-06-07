@@ -80,6 +80,74 @@ typical heap problems
 
     writeup link: []()
 
+### tcache 
+
+* hitb2018-gundam
+
+  game: hitb 2018
+
+  description: a easy uaf with tcache.
+
+  writeup link: none
+
+* codegate2019-god-the-reum 
+
+  game: codegate 2019
+
+  description: a easy uaf in `withdraw` function with tcache.
+
+  writeup link: none
+
+* lctf2018-easy_heap 
+
+  game: lctf 2018
+
+  description:  build fake unlink with unsorted_bin chain then uaf.
+
+  writeup link: none
+
+* hitcon2018-children_tcache 
+
+  game: hitcon2018
+
+  description:  unlink to form overlap chunk by off-by-null vuln.
+
+  writeup link: none
+
+* hitcon2018-baby_tcache 
+
+  game: hitcon2018
+
+  description:  unlink to form overlap chunk by off-by-null vuln, and brute force to overwrite stdout to leak libc address by 4bit brute force.
+
+  writeup link: none
+
+* bctf2018-three
+
+  game: bctf 2018
+
+  description:  uaf to brute force to overwrite stdout to leak libc address by 4bit brute force, only three chunks allowed.
+
+  writeup link: none
+
+* bctf2018-houseofAtum 
+
+  game: bctf 2018
+
+  description:  tcache and fastbin chain to form the 0x10 byte backwards.
+
+  writeup link: none
+
+* starctf2019-girlfriend 
+
+  game: starctf 2019
+
+  description:  bypass double free check for tcache in glibc 2.29.
+
+  writeup link: none
+
+
+
 ### sysmalloc
 some exp with sysmalloc function
 

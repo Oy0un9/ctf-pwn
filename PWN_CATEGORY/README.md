@@ -194,6 +194,7 @@ some exp with sysmalloc function
     writeup link: none
 
 ## integer_overflow
+
 typical integer overflow problems
 * source_audit-integer_overflow-0ctf2019-If_on_a_winters_night_a_traveler
 
@@ -204,6 +205,7 @@ typical integer overflow problems
     writeup link: [https://ray-cp.github.io/archivers/0CTF_2019_PWN_WRITEUP#if_on_a_winters_night_a_traveler](https://ray-cp.github.io/archivers/0CTF_2019_PWN_WRITEUP#if_on_a_winters_night_a_traveler)
 
 ## stack
+
 typical stack related problems such as stack overflow. 
 
 ### SROP
@@ -275,7 +277,55 @@ typical stack related problems such as stack overflow.
     writeup link: [https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#quicksort](https://ray-cp.github.io/archivers/STARCTF_2019_PWN_WRITEUP#quicksort)
 
 
+
+## format_string
+
+Some typical format vlun.
+
+* 0ctf2017-EasiestPrintf
+
+  game: 0ctf2017
+
+  description:  trigger malloc by printf.
+
+  writeup link: none
+
+* CISCN2017-NotFormat
+
+  game: CISCN2017
+
+  description:  the same as EasiestPrintf, trigger malloc by printf, just on x64 architecture and compiled by static.
+
+  writeup link: none
+
+* 34c3ctf2017-readme_revenge
+
+  game: 34c3 ctf 
+
+  description:  hajack printf table to fortify_fail function to leak flag.
+
+  writeup link: none
+
+* twctf2018-neighbor_c
+
+  game: twctf 2018
+
+  description:  bruteforce to guess stack addr and stdout addt by 4bytes, and change stderr.fileno to 1, which then can leak address. then write one gadget to malloc_hook, at last trigger malloc.
+
+  writeup link: none
+
+* Hack.lu2017_HeapsOfPrint
+
+  game: Hack.lu 2017
+
+  description:  form a loop by format vlun and write by rbp.
+
+  writeup link: none
+
+  
+
 ## odd_skill
+
 some odd skill that may suprise me
 * rwx-upxpacked-starctf2019-upxofcpp
 
